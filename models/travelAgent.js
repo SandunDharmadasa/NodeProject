@@ -6,6 +6,11 @@ const TravelAgentSchema = new mongoose.Schema({
         required:true
     },
 
+    userId: {
+        type:String,
+        required:true
+    },
+
     contactInfo: {
         type:String,
         required:true

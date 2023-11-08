@@ -3,10 +3,10 @@ const asyncHandler = require('express-async-handler');
 
 //Add travel agent
 const addTravelAgent = asyncHandler(async (req, res) => {
-    const { name, contactInfo, location } = req.body;
+    const { name, userId, contactInfo, location } = req.body;
 
     //Validations
-    if(!name || !contactInfo || !location) {
+    if(!name || !userId || !contactInfo || !location) {
         return res.status(400).json({
             success: false,
             message: 'Please enter all fields'
@@ -27,6 +27,7 @@ const addTravelAgent = asyncHandler(async (req, res) => {
     //create travel agent
     const newTravelAgent = new TravelAgent({
         name,
+        userId,
         contactInfo,
         location
     });
@@ -95,9 +96,10 @@ const editTravelAgent = asyncHandler(async (req, res) => {
             message: 'No agents found'
         });
     } else {
-        const { name, contactInfo, location } = req.body;
+        const { name, userId, contactInfo, location } = req.body;
 
         travelAgent.name = name;
+        travelAgent.userId = userId;
         travelAgent.contactInfo = contactInfo;
         travelAgent.location = location;
 

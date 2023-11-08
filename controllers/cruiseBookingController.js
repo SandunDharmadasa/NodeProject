@@ -3,10 +3,10 @@ const asyncHandler = require('express-async-handler');
 
 //Add cruise booking
 const addCruiseBooking = asyncHandler(async (req, res) => {
-    const { mealPreference, cabinSelection, dateBooked, paymentStatus } = req.body;
+    const { agentId, cruiseId, mealPreference, cabinSelection, dateBooked, paymentStatus } = req.body;
 
     //Validations
-    if(!mealPreference || !cabinSelection || !dateBooked || !paymentStatus) {
+    if(!agentId || !cruiseId || !mealPreference || !cabinSelection || !dateBooked || !paymentStatus) {
         return res.status(400).json({
             success: false,
             message: 'Please enter all fields'
@@ -15,6 +15,8 @@ const addCruiseBooking = asyncHandler(async (req, res) => {
 
     //create cruise booking
     const newCruiseBooking = new CruiseBooking({
+        agentId,
+        cruiseId,
         mealPreference,
         cabinSelection,
         dateBooked,
@@ -68,8 +70,10 @@ const editCruiseBooking = asyncHandler(async (req, res) => {
             message: 'No cruise bookingss found'
         });
     } else {
-        const { mealPreference, cabinSelection, dateBooked, paymentStatus } = req.body;
+        const { agentId, cruiseId, mealPreference, cabinSelection, dateBooked, paymentStatus } = req.body;
 
+        cruiseBooking.agentId = agentId;
+        cruiseBooking.cruiseId = cruiseId;
         cruiseBooking.mealPreference = mealPreference;
         cruiseBooking.cabinSelection = cabinSelection;
         cruiseBooking.dateBooked = dateBooked;

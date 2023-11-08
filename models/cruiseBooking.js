@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const CruiseBookingSchema = new mongoose.Schema({
+    agentId: {
+        type:String,
+        required:true
+    },
+
+    cruiseId: {
+        type:String,
+        required:false
+    },
+
     mealPreference: {
         type:String,
         required:true

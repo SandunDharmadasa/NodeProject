@@ -3,10 +3,10 @@ const asyncHandler = require('express-async-handler');
 
 //Add booking
 const addBooking = asyncHandler(async (req, res) => {
-    const { participantsCount, dateBooked, paymentStatus } = req.body;
+    const { agentId, activityId, packageId, participantsCount, dateBooked, paymentStatus } = req.body;
 
     //Validations
-    if(!participantsCount || !dateBooked || !paymentStatus) {
+    if(!agentId || !activityId || !packageId || !participantsCount || !dateBooked || !paymentStatus) {
         return res.status(400).json({
             success: false,
             message: 'Please enter all fields'
@@ -15,6 +15,9 @@ const addBooking = asyncHandler(async (req, res) => {
 
     //create booking
     const newBooking = new Booking({
+        agentId,
+        activityId, 
+        packageId,
         participantsCount,
         dateBooked,
         paymentStatus
@@ -67,8 +70,11 @@ const editBooking = asyncHandler(async (req, res) => {
             message: 'No booking found'
         });
     } else {
-        const { participantsCount, dateBooked, paymentStatus } = req.body;
+        const { agentId, activityId, packageId, participantsCount, dateBooked, paymentStatus } = req.body;
 
+        booking.agentId = agentId;
+        booking.activityId = activityId;
+        booking.packageId = packageId;
         booking.participantsCount = participantsCount;
         booking.dateBooked = dateBooked;
         booking.paymentStatus = paymentStatus;
