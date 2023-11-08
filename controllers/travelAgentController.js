@@ -1,7 +1,7 @@
 const TravelAgent = require('../models/travelAgent');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add travel agent
 const addTravelAgent = asyncHandler(async (req, res) => {
     const { name, contactInfo, location } = req.body;
 
@@ -13,10 +13,10 @@ const addTravelAgent = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if travel agent already exists
     const travelAgent = await TravelAgent.findOne({ name });
 
-    //if item exists in the cart
+    //if travel agent exists
     if (travelAgent) {
         return res.status(400).json({
             success: false,
@@ -24,14 +24,14 @@ const addTravelAgent = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create travel agent
     const newTravelAgent = new TravelAgent({
         name,
         contactInfo,
         location
     });
 
-    //save item into the cart
+    //save travel agent
     await newTravelAgent.save();
 
     if (newTravelAgent) {
@@ -49,7 +49,7 @@ const addTravelAgent = asyncHandler(async (req, res) => {
     }
 });
 
-//Get User by Id
+//Get travel agent by Id
 const getTravelAgentById = asyncHandler(async (req, res) => {
     const travelAgent = await TravelAgent.findById(req.params.id);
 
@@ -66,7 +66,7 @@ const getTravelAgentById = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the travel agents
 const getTravelAgent = asyncHandler(async (req, res) => {
     const travelAgent = await TravelAgent.find();
 
@@ -85,7 +85,7 @@ const getTravelAgent = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update travel agent
 const editTravelAgent = asyncHandler(async (req, res) => {
     const travelAgent = await TravelAgent.findById(req.params.id);
 
@@ -110,7 +110,7 @@ const editTravelAgent = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete travel agent by Id
 const deleteTravelAgent = asyncHandler(async (req, res)  => {
     const travelAgent = await TravelAgent.findById(req.params.id);
 
@@ -120,7 +120,7 @@ const deleteTravelAgent = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await travelAgent.remove();
+        await travelAgent.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -129,9 +129,9 @@ const deleteTravelAgent = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the travel agents
 const deleteAll = asyncHandler(async (req, res) => {
-    const travelAgent = await TravelAgent.remove();
+    const travelAgent = await TravelAgent.deleteMany();
 
     if (!travelAgent) {
         return res.status(400).json({

@@ -1,7 +1,7 @@
 const Holiday = require('../models/holiday');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add holiday package
 const addHoliday = asyncHandler(async (req, res) => {
     const { name, destination, duration, specialty , price, packageRating } = req.body;
 
@@ -13,7 +13,7 @@ const addHoliday = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if holiday package already exists
     const holiday = await Holiday.findOne({ name });
 
     //if item exists in the cart
@@ -24,7 +24,7 @@ const addHoliday = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create holiday package
     const newHoliday = new Holiday({
         name,
         destination,
@@ -34,7 +34,7 @@ const addHoliday = asyncHandler(async (req, res) => {
         packageRating
     });
 
-    //save item into the cart
+    //save holiday package
     await newHoliday.save();
 
     if (newHoliday) {
@@ -52,7 +52,7 @@ const addHoliday = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the holiday packages
 const getHoliday = asyncHandler(async (req, res) => {
     const holiday = await Holiday.find();
 
@@ -71,7 +71,7 @@ const getHoliday = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update holiday package
 const editHoliday = asyncHandler(async (req, res) => {
     const holiday = await Holiday.findById(req.params.id);
 
@@ -99,7 +99,7 @@ const editHoliday = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete holiday package by Id
 const deleteHoliday = asyncHandler(async (req, res)  => {
     const holiday = await Holiday.findById(req.params.id);
 
@@ -109,7 +109,7 @@ const deleteHoliday = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await holiday.remove();
+        await holiday.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -118,9 +118,9 @@ const deleteHoliday = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the holiday packages
 const deleteAll = asyncHandler(async (req, res) => {
-    const holiday = await Holiday.remove();
+    const holiday = await Holiday.deleteMany();
 
     if (!holiday) {
         return res.status(400).json({

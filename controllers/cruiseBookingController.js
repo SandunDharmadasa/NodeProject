@@ -1,7 +1,7 @@
 const CruiseBooking = require('../models/cruiseBooking');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add cruise booking
 const addCruiseBooking = asyncHandler(async (req, res) => {
     const { mealPreference, cabinSelection, dateBooked, paymentStatus } = req.body;
 
@@ -13,7 +13,7 @@ const addCruiseBooking = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create cruise booking
     const newCruiseBooking = new CruiseBooking({
         mealPreference,
         cabinSelection,
@@ -21,7 +21,7 @@ const addCruiseBooking = asyncHandler(async (req, res) => {
         paymentStatus
     });
 
-    //save item into the cart
+    //save cruise booking
     await newCruiseBooking.save();
 
     if (newCruiseBooking) {
@@ -39,7 +39,7 @@ const addCruiseBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the cruise bookings
 const getCruiseBooking = asyncHandler(async (req, res) => {
     const cruiseBooking = await CruiseBooking.find();
 
@@ -58,7 +58,7 @@ const getCruiseBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update cruise booking
 const editCruiseBooking = asyncHandler(async (req, res) => {
     const cruiseBooking = await CruiseBooking.findById(req.params.id);
 
@@ -84,7 +84,7 @@ const editCruiseBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete cruise booking by Id
 const deleteCruiseBooking = asyncHandler(async (req, res)  => {
     const cruiseBooking = await CruiseBooking.findById(req.params.id);
 
@@ -94,7 +94,7 @@ const deleteCruiseBooking = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await cruiseBooking.remove();
+        await cruiseBooking.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -103,9 +103,9 @@ const deleteCruiseBooking = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the cruise bookings
 const deleteAll = asyncHandler(async (req, res) => {
-    const cruiseBooking = await CruiseBooking.remove();
+    const cruiseBooking = await CruiseBooking.deleteMany();
 
     if (!cruiseBooking) {
         return res.status(400).json({

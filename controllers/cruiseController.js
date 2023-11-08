@@ -1,7 +1,7 @@
 const Cruise = require('../models/cruise');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add cruise
 const addCruise = asyncHandler(async (req, res) => {
     const { name, departureDestination, arrivalDestination, departureDate, arrivalDate, deck, cabin, price, duration, provider } = req.body;
 
@@ -13,10 +13,10 @@ const addCruise = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if cruise already exists
     const cruise = await Cruise.findOne({ name });
 
-    //if item exists in the cart
+    //if cruise exists
     if (cruise) {
         return res.status(400).json({
             success: false,
@@ -24,7 +24,7 @@ const addCruise = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create cruise
     const newCruise = new Cruise({
         name,
         departureDestination,
@@ -38,7 +38,7 @@ const addCruise = asyncHandler(async (req, res) => {
         provider
     });
 
-    //save item into the cart
+    //save cruise
     await newCruise.save();
 
     if (newCruise) {
@@ -56,7 +56,7 @@ const addCruise = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the cruises
 const getCruise = asyncHandler(async (req, res) => {
     const cruise = await Cruise.find();
 
@@ -75,7 +75,7 @@ const getCruise = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update cruise
 const editCruise = asyncHandler(async (req, res) => {
     const cruise = await Cruise.findById(req.params.id);
 
@@ -107,7 +107,7 @@ const editCruise = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete cruise by Id
 const deleteCruise = asyncHandler(async (req, res)  => {
     const cruise = await Cruise.findById(req.params.id);
 
@@ -117,7 +117,7 @@ const deleteCruise = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await cruise.remove();
+        await cruise.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -126,11 +126,11 @@ const deleteCruise = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the cruises
 const deleteAll = asyncHandler(async (req, res) => {
-    const cart = await Cart.remove();
+    const cruise = await Cruise.deleteMany();
 
-    if (!cart) {
+    if (!cruise) {
         return res.status(400).json({
             success: false,
             message: 'No data found'

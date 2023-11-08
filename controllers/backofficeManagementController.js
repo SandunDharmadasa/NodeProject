@@ -1,7 +1,7 @@
 const BackofficeManagement = require('../models/backofficeManagement');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add backoffice management
 const addBackofficeManagement = asyncHandler(async (req, res) => {
     const { backofficeName, lastUpdated, updateType, productType , dataFile } = req.body;
 
@@ -13,10 +13,10 @@ const addBackofficeManagement = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if backoffice management already exists
     const backofficeManagement = await BackofficeManagement.findOne({ backofficeName });
 
-    //if item exists in the cart
+    //if backoffice management exists
     if (backofficeManagement) {
         return res.status(400).json({
             success: false,
@@ -24,7 +24,7 @@ const addBackofficeManagement = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create backoffice managements
     const newBackofficeManagement = new BackofficeManagement({
         backofficeName,
         lastUpdated,
@@ -33,7 +33,7 @@ const addBackofficeManagement = asyncHandler(async (req, res) => {
         dataFile
     });
 
-    //save item into the cart
+    //save backoffice management
     await newBackofficeManagement.save();
 
     if (newBackofficeManagement) {
@@ -51,7 +51,7 @@ const addBackofficeManagement = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the backoffice managements
 const getBackofficeManagement = asyncHandler(async (req, res) => {
     const backofficeManagement = await BackofficeManagement.find();
 
@@ -70,7 +70,7 @@ const getBackofficeManagement = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update backoffice management
 const editBackofficeManagement = asyncHandler(async (req, res) => {
     const backofficeManagement = await BackofficeManagement.findById(req.params.id);
 
@@ -97,7 +97,7 @@ const editBackofficeManagement = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete backoffice management by Id
 const deleteBackofficeManagement = asyncHandler(async (req, res)  => {
     const backofficeManagement = await BackofficeManagement.findById(req.params.id);
 
@@ -107,7 +107,7 @@ const deleteBackofficeManagement = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await backofficeManagement.remove();
+        await backofficeManagement.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -116,9 +116,9 @@ const deleteBackofficeManagement = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the backoffice managements
 const deleteAll = asyncHandler(async (req, res) => {
-    const backofficeManagement = await BackofficeManagement.remove();
+    const backofficeManagement = await BackofficeManagement.deleteMany();
 
     if (!backofficeManagement) {
         return res.status(400).json({

@@ -1,7 +1,7 @@
 const Activity = require('../models/activity');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add activity
 const addActivity = asyncHandler(async (req, res) => {
     const { name, destination, date, type, starRating, price, ageRestriction } = req.body;
 
@@ -13,10 +13,10 @@ const addActivity = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if activity already exists
     const activity = await Activity.findOne({ name });
 
-    //if item exists in the cart
+    //if activity exists
     if (activity) {
         return res.status(400).json({
             success: false,
@@ -24,7 +24,7 @@ const addActivity = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create activity
     const newActivity = new Activity({
         name,
         destination,
@@ -35,7 +35,7 @@ const addActivity = asyncHandler(async (req, res) => {
         ageRestriction
     });
 
-    //save item into the cart
+    //save activity
     await newActivity.save();
 
     if (newActivity) {
@@ -53,7 +53,7 @@ const addActivity = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the activities
 const getActivity = asyncHandler(async (req, res) => {
     const activity = await Activity.find();
 
@@ -72,7 +72,7 @@ const getActivity = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update activity
 const editActivity = asyncHandler(async (req, res) => {
     const activity = await Activity.findById(req.params.id);
 
@@ -101,7 +101,7 @@ const editActivity = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete activity by Id
 const deleteActivity = asyncHandler(async (req, res)  => {
     const activity = await Activity.findById(req.params.id);
 
@@ -111,7 +111,7 @@ const deleteActivity = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await activity.remove();
+        await activity.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -120,9 +120,9 @@ const deleteActivity = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the activities
 const deleteAll = asyncHandler(async (req, res) => {
-    const activity = await Activity.remove();
+    const activity = await Activity.deleteMany();
 
     if (!activity) {
         return res.status(400).json({

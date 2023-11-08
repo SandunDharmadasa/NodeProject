@@ -30,6 +30,14 @@ app.use(bodyParser.json());
 
 // ################## Routes start ####################//
 
+app.use('/activity', require('./routes/activityRoutes'));
+app.use('/backofficeManagement', require('./routes/backofficeManagementRoutes'));
+app.use('/booking', require('./routes/bookingRoutes'));
+app.use('/cruiseBooking', require('./routes/cruiseBookingRoutes'));
+app.use('/cruise', require('./routes/cruiseRoutes'));
+app.use('/holiday', require('./routes/holidayRoutes'));
+app.use('/travelAgent', require('./routes/travelAgentRoutes'));
+app.use('/user', require('./routes/userRoutes'));
 
 // ################## Routes end ####################//
 

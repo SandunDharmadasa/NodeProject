@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add user
 const addUser = asyncHandler(async (req, res) => {
     const { username, password, role } = req.body;
 
@@ -13,10 +13,10 @@ const addUser = asyncHandler(async (req, res) => {
         });
     }
 
-    //check if item already exists in the cart
+    //check if user already exists
     const user = await User.findOne({ username });
 
-    //if item exists in the cart
+    //if user exists
     if (user) {
         return res.status(400).json({
             success: false,
@@ -24,14 +24,14 @@ const addUser = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create user
     const newUser = new User({
         username,
         password,
         role
     });
 
-    //save item into the cart
+    //save user
     await newUser.save();
 
     if (newUser) {
@@ -66,7 +66,7 @@ const getUserById = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the users
 const getUser = asyncHandler(async (req, res) => {
     const user = await User.find();
 
@@ -85,7 +85,7 @@ const getUser = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update user
 const editUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
@@ -110,7 +110,7 @@ const editUser = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete user by Id
 const deleteUser = asyncHandler(async (req, res)  => {
     const user = await User.findById(req.params.id);
 
@@ -120,7 +120,7 @@ const deleteUser = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await user.remove();
+        await user.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -129,9 +129,9 @@ const deleteUser = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the users
 const deleteAll = asyncHandler(async (req, res) => {
-    const user = await User.remove();
+    const user = await User.deleteMany();
 
     if (!user) {
         return res.status(400).json({

@@ -1,7 +1,7 @@
 const Booking = require('../models/booking');
 const asyncHandler = require('express-async-handler');
 
-//Add Items to the cart
+//Add booking
 const addBooking = asyncHandler(async (req, res) => {
     const { participantsCount, dateBooked, paymentStatus } = req.body;
 
@@ -13,14 +13,14 @@ const addBooking = asyncHandler(async (req, res) => {
         });
     }
 
-    //create cart item
+    //create booking
     const newBooking = new Booking({
         participantsCount,
         dateBooked,
         paymentStatus
     });
 
-    //save item into the cart
+    //save booking
     await newBooking.save();
 
     if (newBooking) {
@@ -38,7 +38,7 @@ const addBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Retrieve all the items in the cart
+//Retrieve all the bookings
 const getBooking = asyncHandler(async (req, res) => {
     const booking = await Booking.find();
 
@@ -57,7 +57,7 @@ const getBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Update items in the cart
+//Update booking
 const editBooking = asyncHandler(async (req, res) => {
     const booking = await Booking.findById(req.params.id);
 
@@ -82,7 +82,7 @@ const editBooking = asyncHandler(async (req, res) => {
     }
 });
 
-//Delete items in the cart
+//Delete booking by Id
 const deleteBooking = asyncHandler(async (req, res)  => {
     const booking = await Booking.findById(req.params.id);
 
@@ -92,7 +92,7 @@ const deleteBooking = asyncHandler(async (req, res)  => {
             message: 'No data found'
         });
     } else {
-        await booking.remove();
+        await booking.deleteOne();
         
         res.status(200).json({
             success: true,
@@ -101,9 +101,9 @@ const deleteBooking = asyncHandler(async (req, res)  => {
     }
 });
 
-//Remove all the items in the cart
+//Remove all the bookings
 const deleteAll = asyncHandler(async (req, res) => {
-    const booking = await Booking.remove();
+    const booking = await Booking.deleteMany();
 
     if (!booking) {
         return res.status(400).json({
