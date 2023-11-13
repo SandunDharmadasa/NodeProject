@@ -49,6 +49,26 @@ const addUser = asyncHandler(async (req, res) => {
     }
 });
 
+const login = asyncHandler(async (req, res) => {
+    const { username, password } = req.body;
+
+    // Find user by username
+    const user = await User.findOne({ username });
+
+    // Check if the user exists
+    if (!user) {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    // Compare passwords
+    if (user.password === password) {
+        res.json({ success: true, role: user.role });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+});
+
+
 //Get User by Id
 const getUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -148,6 +168,7 @@ const deleteAll = asyncHandler(async (req, res) => {
 
 module.exports = {
     addUser,
+    login,
     getUserById,
     getUser,
     editUser,

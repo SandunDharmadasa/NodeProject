@@ -3,6 +3,7 @@ const router = express.Router();
 
 const{addUser,
     getUserById,
+    login,
     getUser,
     editUser,
     deleteUser,
@@ -10,6 +11,7 @@ const{addUser,
 } = require('../controllers/userController');
 
 router.post('/add', addUser);
+router.post('/login', login);
 router.get('/get/:id', getUserById);
 router.get('/get', getUser);
 router.put('/update/:id', editUser);
